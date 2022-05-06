@@ -1,25 +1,22 @@
 version: 2.1
 
 jobs:
-  build:
-    working_directory: ~/circleci-python
+  test-and-lint:
     docker:
-      - image: "circleci/python:3.6.4"
+      - image: cimg/python:3.10.1
     steps:
       - checkout
-      - run: python manage.py runserver 
-  test:
-    working_directory: ~/circleci-python
-    docker:
-      - image: "circleci/python:3.6.4"
-    steps:
-      - checkout
-      - run: python manage.py test
+      - run:
+          name: install dependencies
+          command: pip install -r requirements.txt
+      - run:
+          name: lint
+          command: pylint my_media/ media_organizer/
+      - run:
+          name: run tests
+          command: python manage.py test
 
 workflows:
-  build_and_test:
+  build-and-test-workflow:
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - test-and-lint

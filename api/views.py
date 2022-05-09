@@ -8,13 +8,13 @@ from api.serializers import ItemSerializer
 
 
 @api_view(['GET'])
-def getdata(request):
+def getDATA(request):
     items = Item.objects.all()
     serializer = ItemSerializer(items, many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
-def additem(request):
+def addItem(request):
     serializer = ItemSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
